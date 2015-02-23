@@ -93,7 +93,7 @@ namespace Ship
             }
             return false;
         }
-        private static bool hitship(string x,string y)
+        public static bool Hitship(string x,string y)
         {
             int x_value = 0;
 			int y_value = 0;
@@ -128,10 +128,7 @@ namespace Ship
 			}
 
         }
-		public bool Hitship
-		{
-			get{return hitship(string x,string y);}
-		}
+		
 		private static bool CheckSpace(int x,int y,int n)
 		{
 			if(n == 2)
@@ -276,6 +273,7 @@ namespace Ship
 			Method.DisplayMap(true);
 			//Console.Clear();
 			int count = 30;
+			int hit = 0;
 			string x;
 			string y;
 			while(count > 0)
@@ -285,13 +283,25 @@ namespace Ship
 				Console.WriteLine("Please Enter the y-axis number: ");
 				y = Console.ReadLine();
 				count--;
-				if(Method.Hitship)
+				if(Method.Hitship(x,y) && hit!= 9)
 				{
-					Console.Clear();
+					
 					Console.WriteLine("Awesome You just hit a battleship");
 					Console.WriteLine("Missile left: " + count);
 					Method.DisplayMap(false);
+					hit++;
 					
+				}
+				//case where the game is win by the player
+				else if(Method.Hitship(x,y) && hit== 8)
+				{
+					Console.Clear();
+					Console.WriteLine("Amazing You have just won the game");
+					Console.WriteLine("Hope you enjoy play this game");
+					Console.WriteLine("if you have found anything you would want me to" +
+						"add or to fix please leave a message on my github");
+					Console.WriteLine("Press any key to Quit...");
+					Console.ReadKey();
 				}
 				else
 				{
@@ -299,9 +309,17 @@ namespace Ship
 					Console.WriteLine("Oh! You missed it, Please Try again");
 					Console.WriteLine("Missile left: " + count);
 					Method.DisplayMap(false);
-				}		
-			}
+				}
 
+			}
+				Console.Clear();
+				Console.WriteLine("Sorry Game is Over");
+				Console.WriteLine("Hope you enjoy play this game");
+				Console.WriteLine("Wanna try again?");	
+				Console.WriteLine("Press any key to Quit...");
+				Console.WriteLine("if you have found anything you would want me to" +
+				"add or to fix please leave a message on my github");
+				Console.ReadKey();
         }
     }
 }
