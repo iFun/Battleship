@@ -8,11 +8,11 @@ namespace Ship
 {
     class Method
     {
-  	     public static string FirstLine;
-         public static int x_length = 10;
-         public static int y_length = 11;
-         public static string [,] Map = new string [x_length,y_length];
-         public static bool[,] Ship_exist = new bool [x_length,y_length];
+  	     private static string FirstLine;
+         private static int x_length = 10;
+         private static int y_length = 11;
+         private static string [,] Map = new string [x_length,y_length];
+         private static bool[,] Ship_exist = new bool [x_length,y_length];
 
         
         public static void init()
@@ -93,17 +93,12 @@ namespace Ship
             }
             return false;
         }
-        public static bool Hitship(string x,string y)
+        public static bool Hitship(int x,int y)
         {
             int x_value = 0;
 			int y_value = 0;
 			
-			if(int.TryParse(y, out x_value)&&int.TryParse(x, out y_value)){}
-			else
-			{
-				Console.WriteLine("The coordinate that you have entered"
-				+ "is not an integer");
-			}
+
 			
 			y_value = y_value + 1;
 			
@@ -111,12 +106,14 @@ namespace Ship
             {
                 Console.WriteLine("The coordinate that you have" 
                 + "entered is not on the map");
+				
             }
             
 			//if hit or not hit
 			if(Ship_exist[x_value,y_value] == true)
             {
                 ChangeStatus(x_value,y_value,true);
+				Ship_exist[x_value,y_value] = false;
 				DisplayMap(false);
 				return true;
             }
@@ -268,40 +265,63 @@ namespace Ship
     {
         static void Main()
         {
-            Method.init();
+            Console.Clear();
+			Console.Title = "Battleship";
+            Console.CursorVisible = false;
+			Method.init();
             Method.DisplayMap(false);
-			Method.DisplayMap(true);
 			//Console.Clear();
 			int count = 30;
 			int hit = 0;
-			string x;
-			string y;
+			int x = 0;
+			int y = 0;
+			string x_input;
+			string y_input;
+			bool empty;
 			while(count > 0)
 			{
-				Console.WriteLine("Please Enter the x-axis number: ");
-				x = Console.ReadLine();
-				Console.WriteLine("Please Enter the y-axis number: ");
-				y = Console.ReadLine();
-				count--;
-				if(Method.Hitship(x,y) && hit!= 9)
-				{
-					
-					Console.WriteLine("Awesome You just hit a battleship");
-					Console.WriteLine("Missile left: " + count);
-					Method.DisplayMap(false);
-					hit++;
-					
-				}
+				Console.WriteLine("hit:" + hit);
+
 				//case where the game is win by the player
-				else if(Method.Hitship(x,y) && hit== 8)
+				if(hit == 9)
 				{
 					Console.Clear();
 					Console.WriteLine("Amazing You have just won the game");
 					Console.WriteLine("Hope you enjoy play this game");
 					Console.WriteLine("if you have found anything you would want me to" +
-						"add or to fix please leave a message on my github");
+						" add or to fix please leave a message on my Github");
 					Console.WriteLine("Press any key to Quit...");
 					Console.ReadKey();
+					break;
+				}
+				
+				do
+				{	
+					empty = false;	//prevent user input null x and null y
+					Console.WriteLine("Please Enter the x-axis number ");
+					x_input = Console.ReadLine();
+					Console.WriteLine("Please Enter the y-axis number ");
+					y_input = Console.ReadLine();
+					if(int.TryParse(x_input, out y)&&int.TryParse(y_input, out x)){}
+					else
+					{
+						Console.WriteLine("The coordinate that you have entered"
+						+ "is not an integer");
+						empty = true;
+					}
+					
+				}while(empty);
+				
+				count--;
+				
+				if(Method.Hitship(x,y) && hit!= 9)
+				{
+					Console.Clear();
+					Console.WriteLine("Awesome You just hit a battleship");
+					Console.WriteLine("Missile left: " + count);
+					Method.DisplayMap(false);
+					hit++;
+					
 				}
 				else
 				{
@@ -309,6 +329,7 @@ namespace Ship
 					Console.WriteLine("Oh! You missed it, Please Try again");
 					Console.WriteLine("Missile left: " + count);
 					Method.DisplayMap(false);
+
 				}
 
 			}
@@ -316,9 +337,9 @@ namespace Ship
 				Console.WriteLine("Sorry Game is Over");
 				Console.WriteLine("Hope you enjoy play this game");
 				Console.WriteLine("Wanna try again?");	
-				Console.WriteLine("Press any key to Quit...");
 				Console.WriteLine("if you have found anything you would want me to" +
 				"add or to fix please leave a message on my github");
+				Console.WriteLine("Press any key to Quit...");
 				Console.ReadKey();
         }
     }
